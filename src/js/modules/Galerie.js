@@ -9,6 +9,7 @@ export default class Galerie {
     this.el = document.querySelector(data.el);
     this.sliderListEl;
     this.menuListEl;
+    this.duree = 1000;
     this._position = 0;
     this.images = []; // On met les données chargée ci dessous dans ce tableau vide.
     this._loadImages(data.images); // On charge les données des images pour hydrater this.images
@@ -58,9 +59,14 @@ export default class Galerie {
     this.menuListEl = this.el.querySelector(".image-menu");
     for (let image of this.images) {
       image.menuRender();
+
+      // activation du bouton du menu
+      image.elMenu.querySelector("a").onclick = (e) => {
+        this._position = image.id - 1;
+        this._display_slide();
+      };
     }
   }
-
   //------------------------------------------------------------------------------
 
   _activateButtons() {
@@ -73,6 +79,8 @@ export default class Galerie {
     this.el.querySelector(".play").onclick = (e) => {
       // On va chercher .new-todo, quand on clique sur une tuche on capture l'évenement
       this._play();
+      e.target.innerHTML = "pause_circle_filled"
+      console.log(e.target);
     };
     // Activation de l'input navigation
     this.el.querySelector(".previous").onclick = (e) => {
@@ -100,7 +108,8 @@ export default class Galerie {
     !this.timer
       ? (this.timer = setInterval(() => {
           this._next();
-        }, 1000))
+
+        }, this.duree))
       : "";
   }
 

@@ -38,7 +38,6 @@ export default class Image {
     this.elMenu = document.createElement("li"); // Création du nouveau li
     this.elMenu.innerHTML = this.templateImgMenu; // .. A la place d'afficher un Coucou on aura le template d'une image ..
 
-    this.setMenuButton();
     this.parent.menuListEl.appendChild(this.elMenu); // .. et il va venir l'ajouter a la Galerie
   }
 
@@ -74,10 +73,5 @@ export default class Image {
       }
     };
   }
-  setMenuButton() {
-    this.elMenu.querySelector("a").onclick = (e) => {
-      this.parent._position = this.id - 1;
-      this.parent._display_slide();
-    };
-  }
+
 }
