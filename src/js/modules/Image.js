@@ -1,4 +1,5 @@
-import imageTemplate from './templates/image'; // On importe imageTemplate
+import imageTemplate from "./templates/image"; // On importe imageTemplate
+import menuTemplate from "./templates/menu"; // On importe imageTemplate
 
 // data: {
 //   parent: Galerie,
@@ -6,41 +7,77 @@ import imageTemplate from './templates/image'; // On importe imageTemplate
 // }
 
 export default class Image {
-  constructor (data) {
+  constructor(data) {
+    this.elSlide;
+    this.elMenu;
     this.parent = data.parent;
     this.id = data.image.id; // Ton id (id de class Image), est égal à l'id de image
     this.src = data.image.src;
     this.alt = data.image.alt;
+    this.href = data.image.href;
     this.content = data.image.content;
-    this.template = imageTemplate;
+    this.templateImgSlide = imageTemplate;
+    this.templateImgMenu = menuTemplate;
   }
+
   /* On crée le render après car dans le constructor on a pas encore
      de code HTML du template, quand on le push, le code HTML se construit apres. */
-  render () { // Quand je demande a une image de faire un render ..
-  // On va transformer le this.template
-  // Je remplace les données statique par les données de Image
-    // this.template = this.template.replace('{{id}}', this.id); // On va remplacer (replace) les {{id}} par this.id
-    // this.template = this.template.replace('{{src}}', this.src);
-    // this.template = this.template.replace('{{alt}}', this.alt);
-    // this.template = this.template.replace('{{content}}', this.content); // idem que id
-  //OU BOUCLE
 
-  // for (let propriete in this) { // On parcour toutes les propriétés | this c'est l'objet
-  //     this.template = this.template.replace('{{'+propriete+'}}', this.[propriete]);
-  //   }
-  //
-  //   const newImage = document.createElement('div'); // .. Il va créer un nouveau div ..
-  //   newImage.innerHTML = this.template; // .. A la place d'afficher un Coucou on aura le template d'une image ..
-  //   this.parent.listEl.appendChild(newImage); // .. et il va venir l'ajouter a la Galerie
-  //   propriete.render;
-  // }
-  //
-  for (let propriete in this) { // On parcour toutes les propriétés | this c'est l'objet
-      this.template = this.template.replace('{{'+propriete+'}}', this[propriete]);
+  // Rendu d'une image
+  menuRender() {
+    // On transforme le this.template |  Je remplace les données statique par les données de Image
+    // On parcouri toutes les propriétés - d'un Objet(in) - d'un Tableau(of) | this c'est l'objet
+    for (let propriete in this) {
+      this.templateImgMenu = this.templateImgMenu.replace(
+        "{{" + propriete + "}}",
+        this[propriete]
+      );
     }
 
-    const newImage = document.createElement('div'); // .. Il va créer un nouveau div ..
-    newImage.innerHTML = this.template; // .. A la place d'afficher un Coucou on aura le template d'une image ..
-    this.parent.listEl.appendChild(newImage); // .. et il va venir l'ajouter a la Galerie
+    // CONSTRUCTION D'UNE IMG MENU
+    this.elMenu = document.createElement("li"); // Création du nouveau li
+    this.elMenu.innerHTML = this.templateImgMenu; // .. A la place d'afficher un Coucou on aura le template d'une image ..
+
+    this.setMenuButton();
+    this.parent.menuListEl.appendChild(this.elMenu); // .. et il va venir l'ajouter a la Galerie
+  }
+
+  imageRender() {
+    for (let propriete in this) {
+      // On parcour toutes les propriétés | this c'est l'objet
+      this.templateImgSlide = this.templateImgSlide.replace(
+        "{{" + propriete + "}}",
+        this[propriete]
+      );
+      //this.templateImgMenu = this.templateImgMenu.replace('{{'+propriete+'}}', this[propriete]);
+    }
+    // CONSTRUCTION D'UNE IMG SLIDE
+    this.elSlide = document.createElement("li"); // Création du nouveau li
+    this.elSlide.classList.add("slide"); // class slide au nouveau élément li
+    this.elSlide.innerHTML = this.templateImgSlide; // .. A la place d'afficher un Coucou on aura le template d'une image ..
+    this.setInfoButton();
+    this.parent.sliderListEl.appendChild(this.elSlide); // .. et il va venir l'ajouter a la Galerie
+  }
+  setInfoButton() {
+    this.elSlide.querySelector(".icon.icon-info").onclick = (e) => {
+      if (this.elSlide.querySelector("figcaption").style.right !== "0px") {
+        this.elSlide.querySelector("figcaption").style.right = "0px";
+        this.elSlide.querySelector(
+          ".icon.icon-info .material-icons"
+        ).innerHTML = "remove_circle";
+        console.log(this.parent._position);
+      } else {
+        this.elSlide.querySelector("figcaption").style.right = "-20%";
+        this.elSlide.querySelector(
+          ".icon.icon-info .material-icons"
+        ).innerHTML = "add_circle";
+      }
+    };
+  }
+  setMenuButton() {
+    this.elMenu.querySelector("a").onclick = (e) => {
+      this.parent._position = this.id - 1;
+      this.parent._display_slide();
+    };
   }
 }
