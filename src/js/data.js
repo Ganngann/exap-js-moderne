@@ -30,5 +30,11 @@ export default [
       src: "slides/image5.jpg",
       alt: "consectetur sitis", // Titre
       content: "Photo 5 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi blandit et nisi sed blandit."
-  }
+  },
+  {
+    id: 6,
+    src: "slides/image1old.jpg",
+    alt: "bidibodibidibu", // Titre
+    content: "Photo 6 - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi blandit et nisi sed blandit."
+  },
 ];

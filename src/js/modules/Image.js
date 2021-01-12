@@ -61,15 +61,11 @@ export default class Image {
     this.elSlide.querySelector(".icon.icon-info").onclick = (e) => {
       if (this.elSlide.querySelector("figcaption").style.right !== "0px") {
         this.elSlide.querySelector("figcaption").style.right = "0px";
-        this.elSlide.querySelector(
-          ".icon.icon-info .material-icons"
-        ).innerHTML = "remove_circle";
+        e.target.innerHTML = "remove_circle";
         console.log(this.parent._position);
       } else {
         this.elSlide.querySelector("figcaption").style.right = "-20%";
-        this.elSlide.querySelector(
-          ".icon.icon-info .material-icons"
-        ).innerHTML = "add_circle";
+        e.target.innerHTML = "add_circle";
       }
     };
   }

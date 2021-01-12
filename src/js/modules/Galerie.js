@@ -6,7 +6,9 @@ export default class Galerie {
 
   constructor(data) {
     // data récupérées de l'instanciation new Galerie
+    this.imageQt = data.images.length;
     this.el = document.querySelector(data.el);
+    this.documentTitle = document.title;
     this.sliderListEl;
     this.menuListEl;
     this.duree = 1000;
@@ -35,6 +37,13 @@ export default class Galerie {
 
   // RENDU GALERIE ----------
   render() {
+    for (let propriete in this) {
+      this.template = this.template.replace(
+        "{{" + propriete + "}}",
+        this[propriete]
+      );
+    }
+
     this.el.innerHTML = this.template; // On met le template sur l'element sur lequel on a greffer l'application
     // L'élément .image-list et .image-menu existe pour le naviguateur
 
@@ -72,25 +81,18 @@ export default class Galerie {
   _activateButtons() {
     // Activation de l'input navigation
     this.el.querySelector(".next").onclick = (e) => {
-      // On va chercher .new-todo, quand on clique sur une tuche on capture l'évenement
       this._next();
     };
     // Activation de l'input navigation
-    this.el.querySelector(".play").onclick = (e) => {
-      // On va chercher .new-todo, quand on clique sur une tuche on capture l'évenement
+    this.el.querySelector(".playPause").onclick = (e) => {
       this._play();
-      e.target.innerHTML = "pause_circle_filled"
-      console.log(e.target);
+      this.timer
+        ? (e.target.innerHTML = "pause_circle_filled")
+        : (e.target.innerHTML = "play_circle_filled");
     };
     // Activation de l'input navigation
     this.el.querySelector(".previous").onclick = (e) => {
-      // On va chercher .new-todo, quand on clique sur une tuche on capture l'évenement
       this._previous();
-    };
-    // Activation de l'input navigation
-    this.el.querySelector(".stop").onclick = (e) => {
-      // On va chercher .new-todo, quand on clique sur une tuche on capture l'évenement
-      this._stop();
     };
   }
 
@@ -108,9 +110,8 @@ export default class Galerie {
     !this.timer
       ? (this.timer = setInterval(() => {
           this._next();
-
         }, this.duree))
-      : "";
+      : this._stop();
   }
 
   // BOUTON PREVIOUS ----------
@@ -134,6 +135,6 @@ export default class Galerie {
     this.sliderListEl.style.left = "-" + this._position + "00%";
     this.h1.innerText = this.images[this._position].alt;
     document.title =
-      "Galerie - VanillaJS POO - " + this.images[this._position].alt;
+      this.documentTitle + " - " + this.images[this._position].alt;
   }
 }
