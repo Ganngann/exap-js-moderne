@@ -3,7 +3,7 @@ export default `
 
 <div class="slider fullsize">
    <div class="slides">
-      <ul style="width: {{imageQt}}00%" class="image-list">
+      <ul style="width: {{imageQt }}00%" class="image-list">
          <!-- RENDER IMAGE SLIDE -->
       </ul>
    </div>

@@ -1,10 +1,13 @@
 import Image from "./Image"; // Charge Image
+
+import GnObject from "./GnObject"; // classe générique
+
 import galerieTemplate from "./templates/galerie"; // Charge le template de la galerie
 
-export default class Galerie {
+export default class Galerie extends GnObject {
   // Définit la propriété élément (el)
-
   constructor(data) {
+    super();
     // data récupérées de l'instanciation new Galerie
     this.imageQt = data.images.length;
     this.el = document.querySelector(data.el);
@@ -37,12 +40,15 @@ export default class Galerie {
 
   // RENDU GALERIE ----------
   render() {
-    for (let propriete in this) {
-      this.template = this.template.replace(
-        "{{" + propriete + "}}",
-        this[propriete]
-      );
-    }
+    // cette fonction générique tmplReplace() est issue de la classe parente GnObject et permet de se passer du bloc de code ci-dessous
+    this.template = this.tmplReplace(this.template);
+    // this.tmplReplace(this.template)
+    // for (let propriete in this) {
+    //   this.template = this.template.replace(
+    //     "{{" + propriete + "}}",
+    //     this[propriete]
+    //   );
+    // }
 
     this.el.innerHTML = this.template; // On met le template sur l'element sur lequel on a greffer l'application
     // L'élément .image-list et .image-menu existe pour le naviguateur
@@ -116,13 +122,12 @@ export default class Galerie {
 
   // BOUTON PREVIOUS ----------
   _previous() {
-    // this._position -= 1;
-
     this._position > 0
       ? (this._position -= 1)
       : (this._position = this.images.length - 1);
 
     this._display_slide();
+    console.log(this);
   }
 
   // BOUTON STOP ----------

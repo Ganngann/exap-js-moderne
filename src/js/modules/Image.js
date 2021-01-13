@@ -1,13 +1,15 @@
 import imageTemplate from "./templates/image"; // On importe imageTemplate
 import menuTemplate from "./templates/menu"; // On importe imageTemplate
+import GnObject from "./GnObject"; // classe génériquee
 
 // data: {
 //   parent: Galerie,
 //   image: {id: 1, src: "./assets/slides/image2.jpg", alt: "A cat game", content: "Lorem Ipsum..."}
 // }
 
-export default class Image {
+export default class Image extends GnObject {
   constructor(data) {
+    super();
     this.elSlide;
     this.elMenu;
     this.parent = data.parent;
@@ -26,13 +28,16 @@ export default class Image {
   // Rendu d'une image
   menuRender() {
     // On transforme le this.template |  Je remplace les données statique par les données de Image
-    // On parcouri toutes les propriétés - d'un Objet(in) - d'un Tableau(of) | this c'est l'objet
-    for (let propriete in this) {
-      this.templateImgMenu = this.templateImgMenu.replace(
-        "{{" + propriete + "}}",
-        this[propriete]
-      );
-    }
+    // On parcourt toutes les propriétés - d'un Objet(in) - d'un Tableau(of) | this c'est l'objet
+
+    // cette fonction générique tmplReplace() est issue de la classe parente GnObject et permet de se passer du bloc de code ci-dessous
+    this.templateImgMenu = this.tmplReplace(this.templateImgMenu);
+    // for (let propriete in this) {
+    //   this.templateImgMenu = this.templateImgMenu.replace(
+    //     "{{" + propriete + "}}",
+    //     this[propriete]
+    //   );
+    // }
 
     // CONSTRUCTION D'UNE IMG MENU
     this.elMenu = document.createElement("li"); // Création du nouveau li
@@ -42,14 +47,17 @@ export default class Image {
   }
 
   imageRender() {
-    for (let propriete in this) {
-      // On parcour toutes les propriétés | this c'est l'objet
-      this.templateImgSlide = this.templateImgSlide.replace(
-        "{{" + propriete + "}}",
-        this[propriete]
-      );
-      //this.templateImgMenu = this.templateImgMenu.replace('{{'+propriete+'}}', this[propriete]);
-    }
+    // cette fonction générique tmplReplace() est issue de la classe parente GnObject et permet de se passer du bloc de code ci-dessous
+    this.templateImgSlide = this.tmplReplace(this.templateImgSlide);
+    // for (let propriete in this) {
+    //   // On parcour toutes les propriétés | this c'est l'objet
+    //   this.templateImgSlide = this.templateImgSlide.replace(
+    //     "{{" + propriete + "}}",
+    //     this[propriete]
+    //   );
+    //   //this.templateImgMenu = this.templateImgMenu.replace('{{'+propriete+'}}', this[propriete]);
+    // }
+
     // CONSTRUCTION D'UNE IMG SLIDE
     this.elSlide = document.createElement("li"); // Création du nouveau li
     this.elSlide.classList.add("slide"); // class slide au nouveau élément li
@@ -69,5 +77,4 @@ export default class Image {
       }
     };
   }
-
 }
